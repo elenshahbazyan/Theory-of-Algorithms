@@ -1,52 +1,34 @@
-def failureFunction(P):
+def boyer_moore(T, P):
+    def BadMatchTable(pattern):
+
+        last = {}
+        m = len(pattern)
+        for i in range(len(pattern)):
+            last[pattern[i]] = i
+        return last
+
+    L = BadMatchTable(P)
     m = len(P)
-    F = [0] * m  
-    length = 0  
-    i = 1  
-
-    while i < m:
-        if P[i] == P[length]:
-            length += 1
-            F[i] = length
-            i += 1
-        else:
-            if length != 0:
-                length = F[length - 1]  
-            else:
-                F[i] = 0
-                i += 1
-    return F
-
-def KMPMatch(T, P):
     n = len(T)
-    m = len(P)
+    i = 0
+    print(L)
+    
+    while i <= n - m:
+        j = m - 1
+        while j >= 0 and T[i + j] == P[j]:
+            j -= 1
 
-    F = failureFunction(P)
+        if j == -1:
+            return f"Pattern found at index {i}"
+        else:
+            i += max(1, j - L.get(T[i + j], -1))
+    
+    return "Pattern not found"
 
-    t = []
-    i = 0  
-    j = 0  
+text = "MY NAME IS ELEN"
+pattern = "ELEN"
 
-    while i < n:
-        if P[j] == T[i]:
-            i += 1
-            j += 1
+result = boyer_moore(text, pattern)
+print(result)
 
-        if j == m:
-            t.append(i - j)  
-            j = F[j - 1]  
 
-        elif i < n and P[j] != T[i]:
-            if j != 0:
-                j = F[j - 1]  
-            else:
-                i += 1
-
-    return t
-
-T = "ababdabacdababcabab" 
-P = "ababcabab"
-
-t = KMPMatch(T, P)
-print(failureFunction(P))
-print(t)
