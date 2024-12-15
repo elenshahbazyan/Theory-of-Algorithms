@@ -5,32 +5,42 @@ def orientation(p, q, r):
     elif val > 0:
         return 1
     else:
-        return -1
+        return 2
 
-def convex_hull(points):
-    points = sorted(points, key=lambda p: (p[0], p[1]))
-    n = len(points)
+def on_segment(p, q, r):
+    if (min(p[0], r[0]) <= q[0] <= max(p[0], r[0]) and
+        min(p[1], r[1]) <= q[1] <= max(p[1], r[1])):
+        return True
+    return False
 
-    if n < 3:
-        return points
+def do_intersect(p1, q1, p2, q2):
+    o1 = orientation(p1, q1, p2)
+    o2 = orientation(p1, q1, q2)
+    o3 = orientation(p2, q2, p1)
+    o4 = orientation(p2, q2, q1)
+    
+    if o1 != o2 and o3 != o4:
+        return True
+    if o1 == 0 and on_segment(p1, p2, q1):
+        return True
+    if o2 == 0 and on_segment(p1, q2, q1):
+        return True
+    if o3 == 0 and on_segment(p2, p1, q2):
+        return True
+    if o4 == 0 and on_segment(p2, q1, q2):
+        return True
+    return False
 
-    lower = []
-    for p in points:
-        while len(lower) >= 2 and orientation(lower[-2], lower[-1], p) != -1:
-            lower.pop()
-        lower.append(p)
+p1 = (1, 1)
+q1 = (10, 1)
+p2 = (1, 2)
+q2 = (10, 2)
 
-    upper = []
-    for p in reversed(points):
-        while len(upper) >= 2 and orientation(upper[-2], upper[-1], p) != -1:
-            upper.pop()
-        upper.append(p)
+if do_intersect(p1, q1, p2, q2):
+    print("The line segments intersect.")
+else:
+    print("The line segments do not intersect.")
 
-    return lower[:-1] + upper[:-1]
-
-points = [(0, 0), (1, 1), (2, 2), (3, 3), (0, 3), (3, 0), (1, 2), (2, 1)]
-hull = convex_hull(points)
-print("Convex Hull:", hull)
 
 
 
