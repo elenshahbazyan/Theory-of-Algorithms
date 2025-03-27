@@ -6,8 +6,6 @@ The repository covers topics ranging from basic algorithmic techniques to more a
 # Topics Covered:
 Algorithm design techniques
 
-Time and space complexity analysis (Big-O, Big-Ω, Big-Θ)
-
-Graph algorithms 
+Time and space complexity analysis (Big-O, Big-Ω, Big-Θ) 
 
 Sorting algorithms and their proofs
